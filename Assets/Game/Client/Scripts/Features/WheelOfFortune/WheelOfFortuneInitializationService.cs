@@ -1,4 +1,5 @@
-﻿using Game.Client.Scripts.Core.AssetSystem;
+﻿using System.Threading;
+using Game.Client.Scripts.Core.AssetSystem;
 using Game.Client.Scripts.Core.StateMachine;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
 using Game.Client.Scripts.Features.WheelOfFortune.Reward;
@@ -22,11 +23,14 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 		private IWheelModel _wheelModel;
 		private IWheelSpinService _spinService;
 
-		public WheelOfFortuneInitializationService(IAssetsProvider assetsProvider, IWheelView view, WheelOfFortuneSettings settings)
+		private CancellationToken _viewDestroyCancellationToken;
+
+		public WheelOfFortuneInitializationService(IAssetsProvider assetsProvider, WheelView view, WheelOfFortuneSettings settings)
 		{
 			_assetsProvider = assetsProvider;
 			_view = view;
 			_settings = settings;
+			_viewDestroyCancellationToken = view.destroyCancellationToken;
 
 			_wheelModel = new WheelModel();
 			
@@ -76,10 +80,10 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 		{
 			_stateMachine = new WheelStateMachine();
 			
-			_stateMachine.RegisterState<CooldownState>(new CooldownState(_stateMachine, _wheelController, _spinService, _settings));
+			_stateMachine.RegisterState<CooldownState>(new CooldownState(_stateMachine, _wheelController, _wheelGenerator, _wheelModel, _settings, _viewDestroyCancellationToken));
 			_stateMachine.RegisterState<ActiveState>(new ActiveState(_stateMachine, _wheelController, _spinService, _settings));
-			_stateMachine.RegisterState<SpinningState>(new SpinningState(_stateMachine, _wheelController, _settings));
-			_stateMachine.RegisterState<RewardState>(new RewardState(_stateMachine, _wheelController, _rewardSystem, _settings));
+			_stateMachine.RegisterState<SpinningState>(new SpinningState(_stateMachine, _wheelController, _settings, _viewDestroyCancellationToken));
+			_stateMachine.RegisterState<RewardState>(new RewardState(_stateMachine, _wheelController, _rewardSystem, _settings, _viewDestroyCancellationToken));
 		}
 	}
 }

@@ -24,11 +24,5 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 			
 			Debug.Log($"Выигрышный слот: {winningSectorId}, Значение: {winningValue}");
 		}
-    
-		public void GenerateNewWheel()
-		{
-			var newWheelData = _wheelGenerator.GenerateWheel();
-			_wheelModel.SetWheelData(newWheelData);
-		}
 	}
 }

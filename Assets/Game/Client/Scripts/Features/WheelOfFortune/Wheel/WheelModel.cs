@@ -5,17 +5,23 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 	public class WheelModel : IWheelModel
 	{
 		private WheelData _currentWheelData;
+		private WheelData _lastWheelData;
 		private WheelSpinResultData _currentSpinResult;
     
 		public WheelData CurrentWheelData => _currentWheelData;
-
+		public WheelData LastWheelData => _lastWheelData;
 		public WheelSpinResultData CurrentSpinResult => _currentSpinResult;
 
-		public void SetWheelData(WheelData wheelData)
+		public void SetCurrentWheelData(WheelData wheelData)
 		{
 			_currentWheelData = wheelData;
 		}
-		
+
+		public void SetLastWheelData(WheelData wheelData)
+		{
+			_lastWheelData = wheelData;
+		}
+
 		public void SetSpinResult(WheelSpinResultData spinResult)
 		{
 			_currentSpinResult = spinResult;

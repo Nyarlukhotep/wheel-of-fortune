@@ -5,7 +5,11 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 	[Serializable]
 	public class RewardDistributionData
 	{
-		public int Value;
-		public int Count;
+		public int Value { get; }
+
+		public RewardDistributionData(int value)
+		{
+			Value = value;
+		}
 	}
 }

@@ -10,12 +10,20 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.UI
         
         public void SetIcon(Sprite sprite)
         {
-            _rewardIcon.sprite = sprite;
+            if (_rewardIcon != null)
+            {
+                _rewardIcon.sprite = sprite;
+            }
         }
 
         public void Reset()
         {
-            _rewardIcon.sprite = null;
+            gameObject.SetActive(false);
+            
+            if (_rewardIcon != null)
+            {
+                _rewardIcon.sprite = null;
+            }
         }
     }
 }

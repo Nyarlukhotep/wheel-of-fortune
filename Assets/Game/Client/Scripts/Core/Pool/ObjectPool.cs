@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Game.Client.Scripts.Core.Factory;
+using UnityEngine;
 
 namespace Game.Client.Scripts.Core.Pool
 {
@@ -22,20 +23,29 @@ namespace Game.Client.Scripts.Core.Pool
 
 		public async Task<T> GetAsync()
 		{
-			if (_pool.TryPop(out var obj))
+			try
 			{
+				if (_pool.TryPop(out var obj))
+				{
+					return obj;
+				}
+
+				if (_activeCount >= _maxSize)
+				{
+					throw new InvalidOperationException("Pool limit reached");
+				}
+				
+				obj = await _factory.Create();
+				
+				_activeCount++;
 				return obj;
 			}
-
-			if (_activeCount >= _maxSize)
+			catch (Exception e)
 			{
-				throw new InvalidOperationException("Pool limit reached");
+				Debug.LogError($"[ERROR] Pool GetAsync: {e.Message} | {e.StackTrace}");
 			}
-			
-			obj = await _factory.Create();
-			
-			_activeCount++;
-			return obj;
+
+			return default;
 		}
 
 		public void Return(T obj)
@@ -59,10 +69,18 @@ namespace Game.Client.Scripts.Core.Pool
 
 		public async Task InitializeAsync(int initialSize)
 		{
-			for (var i = 0; i < initialSize; i++)
+			try
 			{
-				var obj = await _factory.Create();
-				_pool.Push(obj);
+				for (var i = 0; i < initialSize; i++)
+				{
+					var obj = await _factory.Create();
+					obj.Reset();
+					_pool.Push(obj);
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[ERROR] Pool InitializeAsync: {e.Message} | {e.StackTrace}");
 			}
 		}
 	}

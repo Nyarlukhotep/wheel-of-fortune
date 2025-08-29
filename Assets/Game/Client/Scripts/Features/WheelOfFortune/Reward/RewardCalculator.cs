@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
-using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 {
@@ -21,7 +20,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
             {
                 for (var i = 0; i < totalReward; i++)
                 {
-                    distribution.Add(new RewardDistributionData { Value = 1, Count = 1 });
+                    distribution.Add(new RewardDistributionData(1));
                 }
             }
             else
@@ -31,39 +30,24 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
                 
                 if (baseValue > 0)
                 {
-                    distribution.Add(new RewardDistributionData 
-                    { 
-                        Value = baseValue, 
-                        Count = _settings.MaxRewardObjectsAmount - remainder 
-                    });
+                    for (var i = 0; i < _settings.MaxRewardObjectsAmount - remainder; i++)
+                    {
+                        distribution.Add(new RewardDistributionData(baseValue));
+                    }
+                }
+
+                if (remainder < 1)
+                {
+                    return distribution;
                 }
                 
-                if (remainder > 0)
+                for (var i = 0; i < remainder; i++)
                 {
-                    distribution.Add(new RewardDistributionData 
-                    { 
-                        Value = baseValue + 1, 
-                        Count = remainder 
-                    });
+                    distribution.Add(new RewardDistributionData(baseValue + 1));
                 }
             }
             
             return distribution;
-        }
-        
-        public List<int> FlattenDistributionData(List<RewardDistributionData> distribution)
-        {
-            var result = new List<int>();
-            
-            foreach (var dist in distribution)
-            {
-                for (var i = 0; i < dist.Count; i++)
-                {
-                    result.Add(dist.Value);
-                }
-            }
-            
-            return result;
         }
     }
 }

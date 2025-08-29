@@ -60,8 +60,12 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 				
 				OnAnimationCompleted?.Invoke(this);
 			}
+			catch (OperationCanceledException)
+			{
+			}
 			catch (Exception e)
 			{
+				Debug.LogError($"[ERROR] RewardObjectModel::Spawn: {e.Message}");
 			}
 		}
 

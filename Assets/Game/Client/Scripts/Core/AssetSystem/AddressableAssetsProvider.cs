@@ -14,36 +14,50 @@ namespace Game.Client.Scripts.Core.AssetSystem
 
 		public async Task<GameObject> LoadAsset(string address)
 		{
-			if (_preloadedAssets.TryGetValue(address, out var preloadedAsset))
+			try
 			{
-				return preloadedAsset;
-			}
+				if (_preloadedAssets.TryGetValue(address, out var preloadedAsset))
+				{
+					return preloadedAsset;
+				}
 
-			if (_handles.ContainsKey(address) && _handles[address].IsValid())
+				if (_handles.ContainsKey(address) && _handles[address].IsValid())
+				{
+					await _handles[address].Task;
+					return _handles[address].Result;
+				}
+
+				var handle = Addressables.LoadAssetAsync<GameObject>(address);
+				_handles[address] = handle;
+		        
+				await handle.Task;
+
+				if (handle.Status != AsyncOperationStatus.Succeeded)
+				{
+					throw new Exception($"Failed to load asset: {address}");
+				}
+		        
+				return handle.Result;
+			}
+			catch (OperationCanceledException)
 			{
-				await _handles[address].Task;
-				return _handles[address].Result;
+				throw;
 			}
-
-			var handle = Addressables.LoadAssetAsync<GameObject>(address);
-			_handles[address] = handle;
-	        
-			await handle.Task;
-
-			if (handle.Status != AsyncOperationStatus.Succeeded)
-			{
-				throw new Exception($"Failed to load asset: {address}");
-			}
-	        
-			return handle.Result;
 		}
 
 		public async Task PreloadAsset(string address)
 		{
-			if (!_preloadedAssets.ContainsKey(address))
+			try
 			{
-				var asset = await LoadAsset(address);
-				_preloadedAssets[address] = asset;
+				if (!_preloadedAssets.ContainsKey(address))
+				{
+					var asset = await LoadAsset(address);
+					_preloadedAssets[address] = asset;
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				throw;
 			}
 		}
 

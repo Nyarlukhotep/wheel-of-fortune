@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
 using Game.Client.Scripts.Features.WheelOfFortune.Reward;
@@ -16,6 +17,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 
         private WheelSectorModel[] _wheelSectorsData;
         private WheelData _currentWheelData;
+        private Dictionary<RewardType, Sprite> _cachedRewardIcons = new();
 
         public event Action OnSpinButtonPressed;
 
@@ -34,6 +36,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
         {
             InitializeView();
             CreateSectorsData();
+            CacheRewardIcons();
         }
 
         public void Dispose()
@@ -161,17 +164,20 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
             }
         }
 
+        private void CacheRewardIcons()
+        {
+            _cachedRewardIcons = _settings.RewardVisuals.ToDictionary(x => x.RewardType, x => x.RewardSprite);
+        }
+        
         private void UpdateRewardIcon(RewardType rewardType)
         {
-            var visualData = _settings.RewardVisuals.FirstOrDefault(x => x.RewardType == rewardType);
-            
-            if (visualData == null)
+            if (!_cachedRewardIcons.TryGetValue(rewardType, out var sprite))
             {
                 Debug.LogError($"[ERROR] Visual data for reward {rewardType} not found");
                 return;
             }
             
-            _view.UpdateRewardIcon(visualData.RewardSprite);
+            _view.UpdateRewardIcon(sprite);
         }
 
 #endregion

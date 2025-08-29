@@ -22,7 +22,14 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Factory
 
 		public async Task PreloadPrefab()
 		{
-			_prefab = await _assetProvider.LoadAsset(_assetAddress);
+			try
+			{
+				_prefab = await _assetProvider.LoadAsset(_assetAddress);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[ERROR] PreloadPrefab: {e.Message} | {e.StackTrace}");
+			}
 		}
 
 		public async Task<RewardObjectView> Create()

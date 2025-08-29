@@ -5,6 +5,7 @@ using Game.Client.Scripts.Constants;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
 using Game.Client.Scripts.Features.WheelOfFortune.Reward;
 using Game.Client.Scripts.Utils.Extensions;
+using UnityEngine;
 using Random = System.Random;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
@@ -23,6 +24,11 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
             
             _random = new Random();
             _sectorCount = GameConstants.WheelOfFortune.SECTORS_COUNT;
+        }
+        
+        public void SetLastWonRewardType(RewardType rewardType)
+        {
+            _lastGeneratedType = rewardType;
         }
         
         public WheelData GenerateWheel()

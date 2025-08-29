@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Game.Client.Scripts.Core.StateMachine;
-using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {

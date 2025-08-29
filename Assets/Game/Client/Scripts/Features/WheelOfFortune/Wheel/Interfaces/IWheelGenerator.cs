@@ -1,4 +1,5 @@
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
+using Game.Client.Scripts.Features.WheelOfFortune.Reward;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
@@ -6,5 +7,6 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
     {
         WheelData GenerateWheel();
         int GetRandomSector();
+        void SetLastWonRewardType(RewardType rewardType);
     }
 }

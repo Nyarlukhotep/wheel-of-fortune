@@ -3,93 +3,96 @@ using System.Threading;
 using System.Threading.Tasks;
 using Game.Client.Scripts.Core.StateMachine;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
+using Game.Client.Scripts.Features.WheelOfFortune.Reward;
 using Game.Client.Scripts.Features.WheelOfFortune.Wheel;
 using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
-    public class CooldownState : IState, IDisposable
+    public class CooldownState : IState
     {
         private readonly IStateMachine _stateMachine;
         private readonly IWheelController _controller;
-        private readonly IWheelSpinService _wheelSpinService;
+        private readonly IWheelGenerator _wheelGenerator;
+        private readonly IWheelModel _wheelModel;
         private readonly WheelOfFortuneSettings _settings;
+        private readonly CancellationToken _cancellationToken;
 
-        private CancellationTokenSource _cancellationTokenSource;
         private float _currentTime;
 
-        public CooldownState(IStateMachine stateMachine, IWheelController controller, IWheelSpinService wheelSpinService, WheelOfFortuneSettings settings)
+        public CooldownState(
+            IStateMachine stateMachine,
+            IWheelController controller,
+            IWheelGenerator wheelGenerator,
+            IWheelModel wheelModel,
+            WheelOfFortuneSettings settings,
+            CancellationToken cancellationToken)
         {
-            _wheelSpinService = wheelSpinService;
+            _wheelModel = wheelModel;
+            _cancellationToken = cancellationToken;
+            _wheelGenerator = wheelGenerator;
             _stateMachine = stateMachine;
             _controller = controller;
             _settings = settings;
         }
 
-        public void Dispose()
+        public void Enter()
         {
-            _currentTime = 0;
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
-        }
-
-        public async void Enter()
-        {
-            try
-            {
-                _currentTime = _settings.SpinCooldownDuration;
-            
-                _controller.SetButtonInteractable(false);
-                _controller.SetButtonText($"{_settings.SpinCooldownDuration}");
-                _controller.SetButtonTextColor(_settings.CooldownButtonTextColor);
-                _controller.HideRewardText();
-                _controller.ShowRewardIcon();
-            
-                await GenerateWheelEverySecond();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[ERROR] Enter {typeof(CooldownState)}: {e.Message} | {e.StackTrace}");
-            }
+            _currentTime = _settings.SpinCooldownDuration;
+        
+            _controller.SetButtonInteractable(false);
+            _controller.SetButtonText($"{_settings.SpinCooldownDuration}");
+            _controller.SetButtonTextColor(_settings.CooldownButtonTextColor);
+            _controller.HideRewardText();
+            _controller.ShowRewardIcon();
+        
+            GenerateWheelEverySecond();
         }
 
         public void Exit()
         {
-            _controller.SetButtonTextColor(_settings.DefaultButtonTextColor);
+            _wheelModel.SetLastWheelData(_wheelModel.CurrentWheelData);
+            _controller?.SetButtonTextColor(_settings.DefaultButtonTextColor);
         }
 
         private async Task GenerateWheelEverySecond()
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-
             try
             {
                 while (_currentTime > 0)
                 {
+                    UpdateWheel();
+
                     _controller.UpdateCooldownCounter(_currentTime);
-
-                    if (_currentTime > 0)
-                    {
-                        _wheelSpinService.GenerateNewWheel();
-                    }
-
                     _controller.DisplayCurrentWheel();
 
-                    await Task.Delay(1000, _cancellationTokenSource.Token);
+                    await Task.Delay(1000, _cancellationToken);
 
                     _currentTime -= 1f;
                 }
 
-                _stateMachine.Enter<ActiveState>();
+                if (_controller != null)
+                {
+                    _stateMachine.Enter<ActiveState>();
+                }
             }
-            catch (Exception e)
+            catch (OperationCanceledException)
             {
-                Debug.LogError($"[ERROR] GenerateWheelEverySecond: {e.Message} | {e.StackTrace}");
             }
-            finally
+        }
+
+        private void UpdateWheel()
+        {
+            if (_currentTime == 1)
             {
-                _cancellationTokenSource?.Dispose();
+                if (_wheelModel.LastWheelData != null)
+                {
+                    _wheelGenerator.SetLastWonRewardType(_wheelModel.LastWheelData.RewardType);
+                }
             }
+                    
+            var wheelData = _wheelGenerator.GenerateWheel();
+            _wheelModel.SetCurrentWheelData(wheelData);
         }
     }
 }

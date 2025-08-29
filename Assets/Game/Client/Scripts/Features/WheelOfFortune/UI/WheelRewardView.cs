@@ -16,27 +16,42 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.UI
 		
 		public void SetRewardIcon(Sprite sprite)
 		{
-			_rewardIcon.sprite = sprite;
+			if (_rewardIcon != null)
+			{
+				_rewardIcon.sprite = sprite;
+			}
 		}
 
 		public void ShowIcon()
 		{
-			_rewardIcon.enabled = true;
+			if (_rewardIcon != null)
+			{
+				_rewardIcon.enabled = true;
+			}
 		}
 
 		public void HideIcon()
 		{
-			_rewardIcon.enabled = false;
+			if (_rewardIcon != null)
+			{
+				_rewardIcon.enabled = false;
+			}
 		}
 
 		public void ShowText()
 		{
-			_rewardText.enabled = true;
+			if (_rewardText != null)
+			{
+				_rewardText.enabled = true;
+			}
 		}
 
 		public void HideText()
 		{
-			_rewardText.enabled = false;
+			if (_rewardText != null)
+			{
+				_rewardText.enabled = false;
+			}
 		}
 	}
 }
