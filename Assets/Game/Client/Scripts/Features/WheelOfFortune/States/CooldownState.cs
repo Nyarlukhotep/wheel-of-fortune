@@ -10,18 +10,17 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
     public class CooldownState : IState, IDisposable
     {
-        private readonly WheelController _controller;
-        private readonly WheelOfFortuneSettings _settings;
-        private readonly WheelGenerator _wheelGenerator;
         private readonly IStateMachine _stateMachine;
+        private readonly IWheelController _controller;
+        private readonly IWheelSpinService _wheelSpinService;
+        private readonly WheelOfFortuneSettings _settings;
 
         private CancellationTokenSource _cancellationTokenSource;
         private float _currentTime;
-        private readonly WheelGameService _wheelGameService;
 
-        public CooldownState(IStateMachine stateMachine, WheelController controller, WheelGameService wheelGameService, WheelOfFortuneSettings settings)
+        public CooldownState(IStateMachine stateMachine, IWheelController controller, IWheelSpinService wheelSpinService, WheelOfFortuneSettings settings)
         {
-            _wheelGameService = wheelGameService;
+            _wheelSpinService = wheelSpinService;
             _stateMachine = stateMachine;
             _controller = controller;
             _settings = settings;
@@ -71,7 +70,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 
                     if (_currentTime > 0)
                     {
-                        _wheelGameService.GenerateNewWheel();
+                        _wheelSpinService.GenerateNewWheel();
                     }
 
                     _controller.DisplayCurrentWheel();

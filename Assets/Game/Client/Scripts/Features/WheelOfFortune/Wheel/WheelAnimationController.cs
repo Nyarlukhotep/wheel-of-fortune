@@ -7,14 +7,15 @@ using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
-	public class WheelAnimationController
+	public class WheelAnimationController : IWheelAnimationController
 	{
 		private readonly Transform _wheelContainer;
-		private readonly float _slotAngle;
 		private readonly WheelOfFortuneSettings _settings;
+		private readonly float _slotAngle;
+
 		private Action _onCompletedCallback;
 		
-		public WheelAnimationController(WheelView view, WheelOfFortuneSettings settings)
+		public WheelAnimationController(IWheelView view, WheelOfFortuneSettings settings)
 		{
 			_settings = settings;
 			_wheelContainer = view.WheelContainer;

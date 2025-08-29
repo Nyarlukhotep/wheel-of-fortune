@@ -14,13 +14,13 @@ using Random = UnityEngine.Random;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 {
-	public class RewardSystem : IDisposable
+	public class RewardSystem : IRewardSystem
 	{
 		private readonly IAssetsProvider _assetsProvider;
-		private readonly WheelController _controller;
+		private readonly IWheelController _controller;
 		private readonly WheelOfFortuneSettings _settings;
-		private readonly WheelView _view;
-		private readonly WheelModel _wheelModel;
+		private readonly IWheelView _view;
+		private readonly IWheelModel _wheelModel;
 
 		private IObjectPool<RewardObjectView> _pool;
 		private RewardCalculator _rewardCalculator;
@@ -32,7 +32,12 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 
 		public event Action OnRewardAnimationCompleted;
 		
-		public RewardSystem(IAssetsProvider assetsProvider, WheelController controller, WheelModel model, WheelView view, WheelOfFortuneSettings settings)
+		public RewardSystem(
+			IAssetsProvider assetsProvider,
+			IWheelController controller,
+			IWheelModel model,
+			IWheelView view,
+			WheelOfFortuneSettings settings)
 		{
 			_assetsProvider = assetsProvider;
 			_wheelModel = model;
@@ -109,7 +114,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 		{
 			var value = _wheelModel.CurrentSpinResult.WinningValue;
 			var distribution = _rewardCalculator.CalculateDistribution(value);
-			var rewardValues = _rewardCalculator.FlattenDistribution(distribution);
+			var rewardValues = _rewardCalculator.FlattenDistributionData(distribution);
 			_rewardObjectCount = rewardValues.Count;
             
 			foreach (var rewardValue in rewardValues)
@@ -156,7 +161,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 				return null;
 			}
 		   
-			rewardView.transform.SetParent(_view.transform);
+			rewardView.transform.SetParent(_view.Transform);
 
 			var model = new RewardObjectModel(rewardView, new RewardObjectData(_currentRewardIcon, rewardValue));
 			model.Spawn(startPosition, targetPosition, centerPosition, lifeTime);

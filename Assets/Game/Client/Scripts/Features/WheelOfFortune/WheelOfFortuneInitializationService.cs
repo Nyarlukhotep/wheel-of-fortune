@@ -11,20 +11,20 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 	public class WheelOfFortuneInitializationService
 	{
 		private readonly WheelOfFortuneSettings _settings;
-		private readonly WheelView _view;
-		private readonly IAssetsProvider assetsProvider;
+		private readonly IWheelView _view;
+		private readonly IAssetsProvider _assetsProvider;
 
-		private WheelGenerator _wheelGenerator;
+		private IWheelGenerator _wheelGenerator;
 		private IStateMachine _stateMachine;
-		private WheelController _wheelController;
-		private WheelAnimationController _animationController;
-		private RewardSystem _rewardSystem;
-		private WheelModel _wheelModel;
-		private WheelGameService _gameService;
+		private IWheelController _wheelController;
+		private IWheelAnimationController _animationController;
+		private IRewardSystem _rewardSystem;
+		private IWheelModel _wheelModel;
+		private IWheelSpinService _spinService;
 
-		public WheelOfFortuneInitializationService(IAssetsProvider assetsProvider, WheelView view, WheelOfFortuneSettings settings)
+		public WheelOfFortuneInitializationService(IAssetsProvider assetsProvider, IWheelView view, WheelOfFortuneSettings settings)
 		{
-			this.assetsProvider = assetsProvider;
+			_assetsProvider = assetsProvider;
 			_view = view;
 			_settings = settings;
 
@@ -43,12 +43,12 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 
 		private void CreateWheelGameService()
 		{
-			_gameService = new WheelGameService(_wheelGenerator, _wheelModel);
+			_spinService = new WheelSpinService(_wheelGenerator, _wheelModel);
 		}
 
 		private void CreateRewardSystem()
 		{
-			_rewardSystem = new RewardSystem(assetsProvider, _wheelController, _wheelModel, _view, _settings);
+			_rewardSystem = new RewardSystem(_assetsProvider, _wheelController, _wheelModel, _view, _settings);
 		}
 
 		private void CreateWheelAnimationController()
@@ -76,8 +76,8 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 		{
 			_stateMachine = new WheelStateMachine();
 			
-			_stateMachine.RegisterState<CooldownState>(new CooldownState(_stateMachine, _wheelController, _gameService, _settings));
-			_stateMachine.RegisterState<ActiveState>(new ActiveState(_stateMachine, _wheelController, _gameService, _settings));
+			_stateMachine.RegisterState<CooldownState>(new CooldownState(_stateMachine, _wheelController, _spinService, _settings));
+			_stateMachine.RegisterState<ActiveState>(new ActiveState(_stateMachine, _wheelController, _spinService, _settings));
 			_stateMachine.RegisterState<SpinningState>(new SpinningState(_stateMachine, _wheelController, _settings));
 			_stateMachine.RegisterState<RewardState>(new RewardState(_stateMachine, _wheelController, _rewardSystem, _settings));
 		}

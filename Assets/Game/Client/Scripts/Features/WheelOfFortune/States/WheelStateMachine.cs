@@ -30,13 +30,10 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 
 		private TState ChangeState<TState>() where TState : class, IState
 		{
-			Debug.Log($"<color=#FF891C>Game state exit</color> => {_activeState}");
 			_activeState?.Exit();
       
 			var state = GetState<TState>();
 			_activeState = state;
-
-			Debug.Log($"<color=#6DFF23>Game state enter</color> => {_activeState}");
       
 			return state;
 		}

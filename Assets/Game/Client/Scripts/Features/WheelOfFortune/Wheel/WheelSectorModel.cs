@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
-	public class WheelSectorModel
+	public class WheelSectorModel : IWheelSectorModel
 	{
 		private readonly IWheelSectorView _view;
 

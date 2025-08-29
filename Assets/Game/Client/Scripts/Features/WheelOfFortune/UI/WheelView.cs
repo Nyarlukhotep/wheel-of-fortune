@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.UI
 {
-    public class WheelView : MonoBehaviour
+    public class WheelView : MonoBehaviour, IWheelView
     {
         [SerializeField] private TextMeshProUGUI _titleText;
         [SerializeField] private Transform _wheelContainer;
@@ -12,9 +12,10 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.UI
         [SerializeField] private SpinButton _spinButton;
         [SerializeField] private WheelSectorView[] _wheelSectors;
         
+        public Transform Transform => transform;
         public Transform WheelContainer => _wheelContainer;
 
-        public WheelSectorView[] WheelSectors => _wheelSectors;
+        public IWheelSectorView[] WheelSectors => _wheelSectors;
 
         public event Action OnSpinButtonPressed;
 

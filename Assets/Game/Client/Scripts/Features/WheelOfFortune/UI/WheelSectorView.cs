@@ -1,4 +1,3 @@
-using Game.Client.Scripts.Features.WheelOfFortune.UI;
 using TMPro;
 using UnityEngine;
 

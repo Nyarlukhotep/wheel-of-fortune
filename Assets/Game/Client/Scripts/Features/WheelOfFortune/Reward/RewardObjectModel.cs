@@ -62,7 +62,6 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 			}
 			catch (Exception e)
 			{
-				Debug.LogError($"[ERROR] RewardObjectModel::Spawn: {e.Message}");
 			}
 		}
 

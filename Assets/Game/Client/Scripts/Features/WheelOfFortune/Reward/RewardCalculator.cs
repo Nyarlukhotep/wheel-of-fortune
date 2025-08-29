@@ -6,60 +6,52 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 {
     public class RewardCalculator
     {
-        private WheelOfFortuneSettings _settings;
+        private readonly WheelOfFortuneSettings _settings;
 
         public RewardCalculator(WheelOfFortuneSettings settings)
         {
             _settings = settings;
         }
 
-        public List<RewardDistribution> CalculateDistribution(int totalReward)
+        public List<RewardDistributionData> CalculateDistribution(int totalReward)
         {
-            var distribution = new List<RewardDistribution>();
+            var distribution = new List<RewardDistributionData>();
             
             if (totalReward <= _settings.MaxRewardObjectsAmount)
             {
                 for (var i = 0; i < totalReward; i++)
                 {
-                    distribution.Add(new RewardDistribution { Value = 1, Count = 1 });
+                    distribution.Add(new RewardDistributionData { Value = 1, Count = 1 });
                 }
             }
             else
             {
-                var remainingReward = totalReward;
-                var remainingObjects = _settings.MaxRewardObjectsAmount;
+                var baseValue = totalReward / _settings.MaxRewardObjectsAmount;
+                var remainder = totalReward % _settings.MaxRewardObjectsAmount;
                 
-                while (remainingReward > 0 && remainingObjects > 0)
+                if (baseValue > 0)
                 {
-                    var valuePerObject = Mathf.CeilToInt((float)remainingReward / remainingObjects);
-                    var objectsWithThisValue = Mathf.Min(remainingObjects, remainingReward / valuePerObject);
-                    
-                    if (objectsWithThisValue > 0)
-                    {
-                        distribution.Add(new RewardDistribution 
-                        { 
-                            Value = valuePerObject, 
-                            Count = objectsWithThisValue 
-                        });
-                        
-                        remainingReward -= valuePerObject * objectsWithThisValue;
-                        remainingObjects -= objectsWithThisValue;
-                    }
-                    else
-                    {
-                        if (distribution.Count > 0)
-                        {
-                            distribution[^1].Value += remainingReward;
-                        }
-                        break;
-                    }
+                    distribution.Add(new RewardDistributionData 
+                    { 
+                        Value = baseValue, 
+                        Count = _settings.MaxRewardObjectsAmount - remainder 
+                    });
+                }
+                
+                if (remainder > 0)
+                {
+                    distribution.Add(new RewardDistributionData 
+                    { 
+                        Value = baseValue + 1, 
+                        Count = remainder 
+                    });
                 }
             }
             
             return distribution;
         }
         
-        public List<int> FlattenDistribution(List<RewardDistribution> distribution)
+        public List<int> FlattenDistributionData(List<RewardDistributionData> distribution)
         {
             var result = new List<int>();
             

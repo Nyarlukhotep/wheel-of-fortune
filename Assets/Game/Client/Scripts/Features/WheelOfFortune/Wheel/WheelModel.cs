@@ -2,21 +2,21 @@ using Game.Client.Scripts.Features.WheelOfFortune.Data;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
-	public class WheelModel
+	public class WheelModel : IWheelModel
 	{
 		private WheelData _currentWheelData;
-		private WheelSpinResult _currentSpinResult;
+		private WheelSpinResultData _currentSpinResult;
     
 		public WheelData CurrentWheelData => _currentWheelData;
 
-		public WheelSpinResult CurrentSpinResult => _currentSpinResult;
+		public WheelSpinResultData CurrentSpinResult => _currentSpinResult;
 
 		public void SetWheelData(WheelData wheelData)
 		{
 			_currentWheelData = wheelData;
 		}
 		
-		public void SetSpinResult(WheelSpinResult spinResult)
+		public void SetSpinResult(WheelSpinResultData spinResult)
 		{
 			_currentSpinResult = spinResult;
 		}

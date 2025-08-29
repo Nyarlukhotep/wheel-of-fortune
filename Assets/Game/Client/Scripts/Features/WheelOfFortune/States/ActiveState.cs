@@ -6,19 +6,19 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
     public class ActiveState : IState
     {
-        private readonly WheelController _controller;
+        private readonly IWheelController _controller;
         private readonly IStateMachine _stateMachine;
-        private readonly WheelGameService _wheelGameService;
+        private readonly IWheelSpinService _wheelSpinService;
         private readonly WheelOfFortuneSettings _settings;
 
         public ActiveState(
             IStateMachine stateMachine,
-            WheelController controller,
-            WheelGameService wheelGameService,
+            IWheelController controller,
+            IWheelSpinService wheelSpinService,
             WheelOfFortuneSettings settings)
         {
             _settings = settings;
-            _wheelGameService = wheelGameService;
+            _wheelSpinService = wheelSpinService;
             _stateMachine = stateMachine;
             _controller = controller;
         }
@@ -39,7 +39,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 
         private void StartSpin()
         {
-            _wheelGameService.DetermineSpinResult(_controller);
+            _wheelSpinService.DetermineSpinResult(_controller);
             
             _stateMachine.Enter<SpinningState>();
         }

@@ -9,11 +9,11 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
     public class SpinningState : IState
     {
-        private readonly WheelController _controller;
-        private readonly WheelOfFortuneSettings _settings;
         private readonly IStateMachine _stateMachine;
+        private readonly IWheelController _controller;
+        private readonly WheelOfFortuneSettings _settings;
 
-        public SpinningState(IStateMachine stateMachine, WheelController controller, WheelOfFortuneSettings settings)
+        public SpinningState(IStateMachine stateMachine, IWheelController controller, WheelOfFortuneSettings settings)
         {
             _stateMachine = stateMachine;
             _controller = controller;

@@ -7,21 +7,21 @@ using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
-    public class WheelController : IDisposable
+    public class WheelController : IWheelController
     {
-        private readonly WheelAnimationController _animationController;
+        private readonly IWheelAnimationController _animationController;
+        private readonly IWheelView _view;
+        private readonly IWheelModel _model;
         private readonly WheelOfFortuneSettings _settings;
-        private readonly WheelView _view;
-        private readonly WheelModel _model;
 
         private WheelSectorModel[] _wheelSectorsData;
         private WheelData _currentWheelData;
 
         public event Action OnSpinButtonPressed;
 
-        public WheelController(WheelAnimationController animationController,
-            WheelModel model,
-            WheelView view,
+        public WheelController(IWheelAnimationController animationController,
+            IWheelModel model,
+            IWheelView view,
             WheelOfFortuneSettings settings)
         {
             _model = model;
@@ -99,7 +99,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
             _view.HideRewardIcon();
         }
 
-        public WheelSectorModel GetWheelSectorById(int sectorId)
+        public IWheelSectorModel GetWheelSectorById(int sectorId)
         {
             if (sectorId > _wheelSectorsData.Length - 1)
             {

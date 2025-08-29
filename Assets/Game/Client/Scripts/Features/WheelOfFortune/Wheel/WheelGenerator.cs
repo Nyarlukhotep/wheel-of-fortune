@@ -9,7 +9,7 @@ using Random = System.Random;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Wheel
 {
-    public class WheelGenerator
+    public class WheelGenerator : IWheelGenerator
     {
         private readonly WheelOfFortuneSettings _settings;
         private readonly Random _random;

@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Game.Client.Scripts.Features.WheelOfFortune.Data
 {
-    public class WheelSpinResult
+    public class WheelSpinResultData
     {
         public int WinningSectorId { get; }
         public int WinningValue { get; }
         public Transform SpawnPoint { get; }
 
-        public WheelSpinResult(int winningSectorId, int winningValue, Transform spawnPoint)
+        public WheelSpinResultData(int winningSectorId, int winningValue, Transform spawnPoint)
         {
             WinningSectorId = winningSectorId;
             WinningValue = winningValue;

@@ -10,16 +10,16 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
 	public class RewardState : IState
 	{
-		private readonly WheelController _controller;
 		private readonly IStateMachine _stateMachine;
-		private readonly RewardSystem _rewardSystem;
+		private readonly IWheelController _controller;
+		private readonly IRewardSystem _rewardSystem;
 		private readonly WheelOfFortuneSettings _settings;
 		private readonly int _afterRewardDelay;
 
 		public RewardState(
 			IStateMachine stateMachine, 
-			WheelController controller,
-			RewardSystem rewardSystem,
+			IWheelController controller,
+			IRewardSystem rewardSystem,
 			WheelOfFortuneSettings settings)
 		{
 			_settings = settings;
