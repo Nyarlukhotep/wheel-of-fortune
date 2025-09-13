@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b183463b4594dc9a5b8f0022e0241f0, type: 3}
+  m_Name: WOF settings
+  m_EditorClassIdentifier: 
+  _minRewardAmount: 5
+  _maxRewardAmount: 100
+  _rewardValueStep: 5
+  _maxRewardObjectsAmount: 20
+  _spinCooldownDuration: 10
+  _spinDuration: 5
+  _rewardAnimationPause: 2
+  _rewardVisuals:
+  - RewardType: 0
+    RewardSprite: {fileID: 21300000, guid: 7e80d53ca510a51478294281ee352dcf, type: 3}
+  - RewardType: 1
+    RewardSprite: {fileID: 21300000, guid: a94a12c19c4de4f4cb7895595e42cb5e, type: 3}
+  - RewardType: 2
+    RewardSprite: {fileID: 21300000, guid: d92a20fb84cea5b4a900c9df993b4b37, type: 3}
+  _spinAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5565238
+      value: 0.90687084
+      inSlope: 0.83753777
+      outSlope: 0.83753777
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _rewardObjectAddressableKey: RewardObject
+  _spawnRadiusMin: 50
+  _spawnRadiusMax: 250
+  _rewardAfterSpawnPauseTimeMin: 1
+  _rewardAfterSpawnPauseTimeMax: 2.5
+  <DefaultButtonTextColor>k__BackingField: {r: 0.05, g: 0.05, b: 0.05, a: 1}
+  <CooldownButtonTextColor>k__BackingField: {r: 1, g: 0.4895674, b: 0, a: 1}
+  <WheelTitle>k__BackingField: "\u0420\u0443\u043B\u0435\u0442\u043A\u0430"
+  <SpinButtonTitle>k__BackingField: "\u0418\u0441\u043F\u044B\u0442\u0430\u0442\u044C
+    \u0443\u0434\u0430\u0447\u0443"
