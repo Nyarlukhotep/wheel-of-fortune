@@ -11,14 +11,14 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
 	public class RewardState : IState
 	{
-		private readonly IStateMachine _stateMachine;
 		private readonly IWheelController _controller;
 		private readonly IRewardSystem _rewardSystem;
 		private readonly WheelOfFortuneSettings _settings;
 		private readonly CancellationToken _cancellationToken;
-		private readonly int _afterRewardDelay;
+		private readonly TimeSpan _afterRewardDelay;
+		private IStateMachine _stateMachine;
 
-		public RewardState(IStateMachine stateMachine,
+		public RewardState(
 			IWheelController controller,
 			IRewardSystem rewardSystem,
 			WheelOfFortuneSettings settings, 
@@ -26,11 +26,15 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 		{
 			_settings = settings;
 			_rewardSystem = rewardSystem;
-			_stateMachine = stateMachine;
 			_controller = controller;
 			_cancellationToken = cancellationToken;
 			
-			_afterRewardDelay = (int)(_settings.RewardAnimationPause * 1000);
+			_afterRewardDelay = TimeSpan.FromSeconds(_settings.RewardAnimationPause);
+		}
+
+		public void Register(IStateMachine stateMachine)
+		{
+			_stateMachine = stateMachine;
 		}
 
 		public void Enter()

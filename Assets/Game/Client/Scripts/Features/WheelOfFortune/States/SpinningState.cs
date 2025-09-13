@@ -10,22 +10,25 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
     public class SpinningState : IState
     {
-        private readonly IStateMachine _stateMachine;
         private readonly IWheelController _controller;
         private readonly WheelOfFortuneSettings _settings;
         private readonly CancellationToken _cancellationToken;
+        private IStateMachine _stateMachine;
 
 
         public SpinningState(
-            IStateMachine stateMachine,
             IWheelController controller,
             WheelOfFortuneSettings settings,
             CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _stateMachine = stateMachine;
             _controller = controller;
             _settings = settings;
+        }
+
+        public void Register(IStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
         }
 
         public async void Enter()
@@ -34,8 +37,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
             {
                 _controller?.SetButtonInteractable(false);
 
-                var delay = (int)(_settings.SpinDuration * 1000);
-                await Task.Delay(delay, _cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(_settings.SpinDuration), _cancellationToken);
 
                 if (_controller != null)
                 {

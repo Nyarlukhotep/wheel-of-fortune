@@ -2,6 +2,7 @@
 {
 	public interface IState
 	{
+		void Register(IStateMachine stateMachine);
 		void Enter();
 		void Exit();
 	}

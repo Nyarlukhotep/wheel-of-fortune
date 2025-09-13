@@ -18,6 +18,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 		{
 			var type = typeof(T);
 			
+			state.Register(this);
 			_states.TryAdd(type, state);
 		}
 		

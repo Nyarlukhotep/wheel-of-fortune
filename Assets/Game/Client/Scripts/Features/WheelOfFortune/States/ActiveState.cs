@@ -7,20 +7,23 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
     public class ActiveState : IState
     {
         private readonly IWheelController _controller;
-        private readonly IStateMachine _stateMachine;
         private readonly IWheelSpinService _wheelSpinService;
         private readonly WheelOfFortuneSettings _settings;
+        private IStateMachine _stateMachine;
 
         public ActiveState(
-            IStateMachine stateMachine,
             IWheelController controller,
             IWheelSpinService wheelSpinService,
             WheelOfFortuneSettings settings)
         {
             _settings = settings;
             _wheelSpinService = wheelSpinService;
-            _stateMachine = stateMachine;
             _controller = controller;
+        }
+
+        public void Register(IStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
         }
 
         public void Enter()

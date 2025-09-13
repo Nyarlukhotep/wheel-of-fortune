@@ -48,13 +48,13 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.Reward
 				_view.transform.DOScale(1, GameConstants.WheelOfFortune.REWARD_OBJECT_SPAWN_ANIMATION_DURATION);
 				_view.transform.DOMove(_targetPosition, GameConstants.WheelOfFortune.REWARD_OBJECT_SPAWN_ANIMATION_DURATION);
 
-				var delay = (int)((lifeTime + GameConstants.WheelOfFortune.REWARD_OBJECT_SPAWN_ANIMATION_DURATION) * 1000);
+				var delay = TimeSpan.FromSeconds(lifeTime + GameConstants.WheelOfFortune.REWARD_OBJECT_SPAWN_ANIMATION_DURATION);
 				
 				await Task.Delay(delay, _view.destroyCancellationToken);
 
 				MoveToCenter();
 				
-				delay = (int)(GameConstants.WheelOfFortune.REWARD_OBJECT_HIDE_ANIMATION_DURATION * 1000);
+				delay = TimeSpan.FromSeconds(GameConstants.WheelOfFortune.REWARD_OBJECT_HIDE_ANIMATION_DURATION);
 				
 				await Task.Delay(delay, _view.destroyCancellationToken);
 				

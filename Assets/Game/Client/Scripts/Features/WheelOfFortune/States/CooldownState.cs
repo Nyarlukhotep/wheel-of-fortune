@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Game.Client.Scripts.Core.StateMachine;
 using Game.Client.Scripts.Features.WheelOfFortune.Data;
-using Game.Client.Scripts.Features.WheelOfFortune.Reward;
 using Game.Client.Scripts.Features.WheelOfFortune.Wheel;
 using UnityEngine;
 
@@ -11,17 +10,16 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 {
     public class CooldownState : IState
     {
-        private readonly IStateMachine _stateMachine;
         private readonly IWheelController _controller;
         private readonly IWheelGenerator _wheelGenerator;
         private readonly IWheelModel _wheelModel;
         private readonly WheelOfFortuneSettings _settings;
         private readonly CancellationToken _cancellationToken;
 
-        private float _currentTime;
+        private IStateMachine _stateMachine;
+        private int _currentTime;
 
         public CooldownState(
-            IStateMachine stateMachine,
             IWheelController controller,
             IWheelGenerator wheelGenerator,
             IWheelModel wheelModel,
@@ -31,9 +29,13 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
             _wheelModel = wheelModel;
             _cancellationToken = cancellationToken;
             _wheelGenerator = wheelGenerator;
-            _stateMachine = stateMachine;
             _controller = controller;
             _settings = settings;
+        }
+
+        public void Register(IStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
         }
 
         public void Enter()
@@ -66,9 +68,9 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
                     _controller.UpdateCooldownCounter(_currentTime);
                     _controller.DisplayCurrentWheel();
 
-                    await Task.Delay(1000, _cancellationToken);
+                    await Task.Delay(TimeSpan.FromSeconds(1), _cancellationToken);
 
-                    _currentTime -= 1f;
+                    _currentTime -= 1;
                 }
 
                 if (_controller != null)
@@ -83,7 +85,7 @@ namespace Game.Client.Scripts.Features.WheelOfFortune.States
 
         private void UpdateWheel()
         {
-            if (_currentTime == 1)
+            if (_currentTime - 1 < Mathf.Epsilon)
             {
                 if (_wheelModel.LastWheelData != null)
                 {

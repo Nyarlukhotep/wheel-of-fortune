@@ -80,10 +80,10 @@ namespace Game.Client.Scripts.Features.WheelOfFortune
 		{
 			_stateMachine = new WheelStateMachine();
 			
-			_stateMachine.RegisterState<CooldownState>(new CooldownState(_stateMachine, _wheelController, _wheelGenerator, _wheelModel, _settings, _viewDestroyCancellationToken));
-			_stateMachine.RegisterState<ActiveState>(new ActiveState(_stateMachine, _wheelController, _spinService, _settings));
-			_stateMachine.RegisterState<SpinningState>(new SpinningState(_stateMachine, _wheelController, _settings, _viewDestroyCancellationToken));
-			_stateMachine.RegisterState<RewardState>(new RewardState(_stateMachine, _wheelController, _rewardSystem, _settings, _viewDestroyCancellationToken));
+			_stateMachine.RegisterState<CooldownState>(new CooldownState(_wheelController, _wheelGenerator, _wheelModel, _settings, _viewDestroyCancellationToken));
+			_stateMachine.RegisterState<ActiveState>(new ActiveState(_wheelController, _spinService, _settings));
+			_stateMachine.RegisterState<SpinningState>(new SpinningState(_wheelController, _settings, _viewDestroyCancellationToken));
+			_stateMachine.RegisterState<RewardState>(new RewardState(_wheelController, _rewardSystem, _settings, _viewDestroyCancellationToken));
 		}
 	}
 }
